@@ -11,8 +11,6 @@ build-options:
     RUST_BACKTRACE: "1"
     PKG_CONFIG_PATH: /app/lib/pkgconfig:/app/lib64/pkgconfig:/app/share/pkgconfig:/usr/lib/pkgconfig:/usr/share/pkgconfig
     CPATH: /app/include
-    LIBRARY_PATH: /app/lib:/app/lib64
-    LD_LIBRARY_PATH: /app/lib:/app/lib64
 
 command: flux-fm
 
@@ -75,14 +73,30 @@ modules:
         url: https://gitlab.gnome.org/GNOME/vte/-/archive/0.76.3/vte-0.76.3.tar.gz
         sha256: eb6d80b879914b89c22811743a5d779fa0e9c57acfa925873b521d054b809746
 
+  # ── fish (compiled from source tag 4.9.2) ──────────────────────────────────
+  - name: fish
+    buildsystem: cmake-ninja
+    build-options:
+      build-args:
+        - --share=network
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DCMAKE_INSTALL_PREFIX=/app
+      - -DWITH_MESSAGE_LOCALIZATION=OFF
+    sources:
+      - type: archive
+        url: https://github.com/fish-shell/fish-shell/archive/refs/tags/4.9.2.tar.gz
+        sha256: 13df86468e9a87bfbb5f75dda42800f0aa5c0093511d9e875041e221a4c64be3
+
   # ── flux ────────────────────────────────────────────────────────────────────
   - name: flux
     buildsystem: simple
     build-commands:
-      - cargo build --release --manifest-path Cargo.toml --offline
+      - RUSTFLAGS="-L /app/lib" cargo build --release --manifest-path Cargo.toml --offline
       - make install PREFIX=/app
     sources:
       - type: git
         url: https://github.com/killown/flux.git
-        branch: main
+        tag: v0.1.0
+        commit: 56e350f766888c9b152c324da55ebe9bf55fd9be
       - cargo-sources.json
