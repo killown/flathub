@@ -97,6 +97,6 @@ modules:
     sources:
       - type: git
         url: https://github.com/killown/flux.git
-        tag: v0.1.0
-        commit: 56e350f766888c9b152c324da55ebe9bf55fd9be
+        tag: v0.1.1
+        commit: 22cedd296ac919bc308ad89f1d5c6bb17e0ad291
       - cargo-sources.json
